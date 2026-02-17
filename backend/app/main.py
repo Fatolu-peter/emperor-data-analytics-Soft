@@ -72,8 +72,8 @@ async def run_regression(request: Request, params: RegressionRequest):
         coef_dict = {feat: float(coef) for feat, coef in zip(X_cols, model.coef_)}
         
         return {
-            "r2_score": float(r2),
-            "intercept": float(model.intercept_),
+            "r2_score": float(r2) if not np.isnan(r2) else 0.0,
+            "intercept": float(model.intercept_) if not np.isnan(model.intercept_) else 0.0,
             "coefficients": coef_dict,
             "features_used": X_cols,
             "sample_size": len(subset)
@@ -114,11 +114,15 @@ async def run_anova(request: Request, params: AnovaRequest):
             
         f_stat, p_value = stats.f_oneway(*arrays)
         
+        # Handle NaN values (e.g. constant data)
+        f_val = float(f_stat) if not np.isnan(f_stat) else 0.0
+        p_val = float(p_value) if not np.isnan(p_value) else 1.0
+
         return {
-            "f_value": float(f_stat),
-            "p_value": float(p_value),
+            "f_value": f_val,
+            "p_value": p_val,
             "groups": labels,
-            "status": "significant" if p_value < 0.05 else "not_significant"
+            "status": "significant" if p_val < 0.05 else "not_significant"
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"ANOVA failed: {str(e)}")
