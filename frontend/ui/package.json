@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "generate": "bunx --bun dex-router generate --pagesDir web/pages --layoutsDir web/layouts --outRoutesTs core/router/.generated/routes.ts --outRoutesJson core/router/.generated/manifest.json --outLayoutsTs core/router/.generated/layouts.ts",
+    "generate": "dex-router generate --pagesDir web/pages --layoutsDir web/layouts --outRoutesTs core/router/.generated/routes.ts --outRoutesJson core/router/.generated/manifest.json --outLayoutsTs core/router/.generated/layouts.ts",
     "prepare:build": "bun scripts/prepare-build.ts",
     "build:css": "bun tailwindcss -i web/styles/index.css -o build/assets/styles.css --minify",
     "build:client": "bun build core/bootstrap/web.tsx --target browser --minify --outfile build/assets/client.js",

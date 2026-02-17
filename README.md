@@ -76,7 +76,7 @@ The backend requires a Python environment.
 
 *   **Root Directory**: Set your deployment service's root directory to `backend`.
 *   **Build Command**: `pip install -r requirements.txt`
-*   **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+*   **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT` (Note: Run `app.main:app` NOT `backend.app.main:app` since the root is already `backend/`).
 *   **Environment Variables**:
     *   Ensure `PORT` is set (most hosts do this automatically).
 
