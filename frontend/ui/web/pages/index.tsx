@@ -1,6 +1,6 @@
 import { Link } from '@dex/router/client'
 
-export const metadata = { title: 'Dex Starter' }
+export const metadata = { title: 'Emperor Data Analytics' }
 
 export default function Page() {
 	return (
