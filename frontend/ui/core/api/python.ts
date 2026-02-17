@@ -44,7 +44,7 @@ export interface AnovaResponse {
   status: "significant" | "not_significant";
 }
 
-const API_BASE = import.meta.env?.VITE_API_URL;
+const API_BASE = import.meta.env?.VITE_API_URL || "https://emperor-data-analytics.onrender.com";
 
 export const pythonApi = {
   async upload(file: File) {
