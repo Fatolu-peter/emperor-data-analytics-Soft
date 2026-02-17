@@ -1,7 +1,7 @@
 import { Elysia } from 'elysia'
 
 import { dexAssetsRoute, dexDevReloadRouter, dexPrettyLogger, dexSpaFallback } from '@dex/server'
-import { apiRoutes } from '../../routes/api'
+// import { apiRoutes } from '../../routes/api'
 import { findAvailablePort } from '../../utils/port'
 
 const basePort = Number(process.env.PORT ?? 7990)
@@ -17,7 +17,7 @@ if (port !== basePort) {
  */
 export const app = new Elysia()
 	.use(dexPrettyLogger({ ignore: (p) => p === '/__dev/reload' }))
-	.group('/api', (api) => api.use(apiRoutes()))
+	// .group('/api', (api) => api.use(apiRoutes()))
 	.use(dexAssetsRoute({ assetsDir: 'web/public/assets' }))
 	.use(dexDevReloadRouter())
 	.use(dexSpaFallback({ indexHtmlPath: 'web/public/index.html' }))

@@ -4,7 +4,7 @@ import path from 'node:path'
 import { Elysia } from 'elysia'
 
 import { dexAssetsRoute, dexPrettyLogger, dexSpaFallback } from '@dex/server'
-import { apiRoutes } from '../../routes/api'
+// import { apiRoutes } from '../../routes/api'
 import { findAvailablePort } from '../../utils/port'
 
 const basePort = Number(process.env.PORT ?? 7990)
@@ -27,7 +27,7 @@ const indexHtmlPath = path.join(buildDir, 'index.html')
  */
 const app = new Elysia()
 	.use(dexPrettyLogger())
-	.group('/api', (api) => api.use(apiRoutes()))
+	// .group('/api', (api) => api.use(apiRoutes()))
 
 if (!apiOnly && existsSync(assetsDir)) {
 	app.use(dexAssetsRoute({ assetsDir }))

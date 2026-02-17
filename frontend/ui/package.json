@@ -12,6 +12,7 @@
     "build:client": "bun build core/bootstrap/web.tsx --target browser --minify --outfile build/assets/client.js",
     "build:server": "bun build --compile core/server/prod.ts --outfile build/server",
     "build": "bun run generate && bun run prepare:build && bun run build:css && bun run build:client && bun run build:server",
+    "build:static": "bun run generate && bun run prepare:build && bun run build:css && bun run build:client",
     "dev": "bun scripts/dev.ts",
     "start": "NODE_ENV=production ./build/server"
   },
