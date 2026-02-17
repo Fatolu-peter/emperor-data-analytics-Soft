@@ -44,7 +44,7 @@ export interface AnovaResponse {
   status: "significant" | "not_significant";
 }
 
-const API_BASE = import.meta.env?.VITE_API_URL || "http://localhost:8000";
+const API_BASE = import.meta.env?.VITE_API_URL;
 
 export const pythonApi = {
   async upload(file: File) {
