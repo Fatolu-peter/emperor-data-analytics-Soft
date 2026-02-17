@@ -52,15 +52,16 @@ The frontend provides the user interface.
 cd frontend/ui
 
 # 2. Install Dependencies
-npm install
-# OR
 bun install
 
 # 3. Start the Development Server
-npm run dev
+bun run dev
 # OR
-dex dev
+dex start
 ```
+
+note* if you do not have the `dex cli` installed, you should take a look at the documentation at  [Dex framework docs](https://github.com/patrickaigbogun/dex)
+
 *The UI will be available at `http://localhost:3000` (or similar port)*
 
 ---
