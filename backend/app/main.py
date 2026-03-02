@@ -71,13 +71,16 @@ async def run_regression(request: Request, params: RegressionRequest):
         # Convert to dictionary {Feature: Coef}
         coef_dict = {feat: float(coef) for feat, coef in zip(X_cols, model.coef_)}
         
-        return {
+        result = {
             "r2_score": float(r2) if not np.isnan(r2) else 0.0,
             "intercept": float(model.intercept_) if not np.isnan(model.intercept_) else 0.0,
             "coefficients": coef_dict,
             "features_used": X_cols,
             "sample_size": len(subset)
         }
+        
+        SESSIONS[session_id]["latest_regression"] = result
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Regression failed: {str(e)}")
 
@@ -118,12 +121,15 @@ async def run_anova(request: Request, params: AnovaRequest):
         f_val = float(f_stat) if not np.isnan(f_stat) else 0.0
         p_val = float(p_value) if not np.isnan(p_value) else 1.0
 
-        return {
+        result = {
             "f_value": f_val,
             "p_value": p_val,
             "groups": labels,
             "status": "significant" if p_val < 0.05 else "not_significant"
         }
+        
+        SESSIONS[session_id]["latest_anova"] = result
+        return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"ANOVA failed: {str(e)}")
 
@@ -177,7 +183,9 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         SESSIONS[session_id] = {
             "df": df,
             "filename": file.filename,
-            "numeric_cols": numeric_cols
+            "numeric_cols": numeric_cols,
+            "latest_regression": None,
+            "latest_anova": None
         }
         
         # Convert preview to valid JSON (handle NaN/Inf)

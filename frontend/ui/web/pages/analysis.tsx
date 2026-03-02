@@ -4,6 +4,7 @@ import { Link } from "@dex/router/client";
 import { DataUploader } from "../components/analysis/DataUploader";
 import { SidebarActions } from "../components/analysis/SidebarActions";
 import { ResultsDisplay } from "../components/analysis/ResultsDisplay";
+import * as Exports from "../../utils/export";
 
 export default function AnalysisPage() {
   // Global App State
@@ -162,6 +163,57 @@ export default function AnalysisPage() {
     }
   };
 
+  const currentData = cleanResult?.preview || uploadData?.preview || [];
+
+  const handleExportExcel = () => {
+      // For full export we need full dataset. 
+      // If we only have preview, we might need to fetch full data or warn.
+      // Ideally we fetch full data on export if not present.
+      // For now, let's assume we use what we have in `vizData` if available, or just the preview for demo if vizData missing
+      
+      const dataToExport = vizData?.data || currentData;
+      
+      Exports.exportToExcel({
+          filename: session.filename,
+          data: dataToExport,
+          stats: stats,
+          regression: regResult,
+          anova: anovaResult
+      });
+  };
+
+  const handleExportPDF = () => {
+      const dataToExport = vizData?.data || currentData;
+      Exports.exportToPDF({
+          filename: session.filename,
+          data: dataToExport,
+          stats: stats,
+          regression: regResult,
+          anova: anovaResult
+      });
+  };
+
+  const handleExportCSV = () => {
+      const dataToExport = vizData?.data || currentData;
+      Exports.exportCSV(dataToExport, session.filename || "export");
+  };
+
+  const handleExportImage = () => {
+      if(!vizData) {
+          setError("No chart to export");
+          return;
+      }
+      // Recharts container ID in ResultsDisplay needs to be known. 
+      // We will update ResultsDisplay to have an ID on the chart wrapper.
+      Exports.exportChartImage("analysis-chart-container", session.filename || "chart");
+  };
+
+  // Determine Enabled States based on user rules
+  const isVizActive = !!vizData;
+  const isAnalysisActive = !!(regResult || anovaResult);
+  // Default/Data view is when neither viz nor analysis is active, but we have data
+  const isDataActive = !isVizActive && !isAnalysisActive && session.exists;
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-200 font-sans selection:bg-blue-500/30">
       
@@ -226,6 +278,22 @@ export default function AnalysisPage() {
                         vizType={vizType} setVizType={setVizType}
                         vizX={vizX} setVizX={setVizX}
                         vizY={vizY} setVizY={setVizY}
+                        
+                        onExportExcel={() => handleExportExcel()}
+                        onExportPDF={() => handleExportPDF()}
+                        onExportCSV={() => handleExportCSV()}
+                        onExportImage={() => handleExportImage()}
+
+                        // State Flags
+                        // 1. Chart View: Only Chart enabled
+                        // 2. Analysis View (Reg/Anova): Only PDF enabled (user rule)
+                        // 3. Data View: Excel, PDF, CSV enabled (Chart disabled)
+                        enableExcel={!isVizActive && !isAnalysisActive}
+                        enableCSV={!isVizActive && !isAnalysisActive}
+                        // PDF is enabled for Analysis AND Data view
+                        enablePDF={!isVizActive} 
+                        // Image only for Viz view
+                        enableImage={isVizActive}
                     />
                 )}
             </div>

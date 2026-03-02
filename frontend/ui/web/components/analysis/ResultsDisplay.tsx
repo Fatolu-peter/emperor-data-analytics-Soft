@@ -106,7 +106,7 @@ export function ResultsDisplay({
 
       {/* Visualization */}
       {vizData && (
-         <div className="bg-black/40 border border-white/10 p-6 rounded-2xl shadow-2xl overflow-hidden">
+         <div id="analysis-chart-container" className="bg-black/40 border border-white/10 p-6 rounded-2xl shadow-2xl overflow-hidden">
             <div className="flex justify-between items-center mb-6">
                <h3 className="font-bold text-lg text-green-400 flex items-center gap-2">
                  <span className="w-2 h-6 bg-green-500 rounded-full"/> 

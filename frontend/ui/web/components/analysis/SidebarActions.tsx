@@ -25,6 +25,18 @@ interface SidebarProps {
   setVizX: (val: string) => void;
   vizY: string;
   setVizY: (val: string) => void;
+
+  // Exports
+  onExportExcel?: () => void;
+  onExportPDF?: () => void;
+  onExportCSV?: () => void;
+  onExportImage?: () => void;
+
+  // Export State Props
+  enableExcel?: boolean;
+  enablePDF?: boolean;
+  enableCSV?: boolean;
+  enableImage?: boolean;
 }
 
 export function SidebarActions({
@@ -46,6 +58,16 @@ export function SidebarActions({
   setVizX,
   vizY,
   setVizY,
+  
+  onExportExcel,
+  onExportPDF,
+  onExportCSV,
+  onExportImage,
+
+  enableExcel = true,
+  enablePDF = true,
+  enableCSV = true,
+  enableImage = true
 }: SidebarProps) {
   return (
     <aside className="w-full lg:w-80 flex-shrink-0 space-y-6">
@@ -161,8 +183,66 @@ export function SidebarActions({
             </button>
         </div>
       </div>
+
+       {/* Export Center */}
+       <div className="bg-white/5 border border-white/10 rounded-xl p-4 backdrop-blur-sm space-y-4">
+        <label className="flex items-center gap-2 text-sm font-semibold text-orange-300 uppercase tracking-wider">
+           Export Center
+        </label>
+        
+        <div className="grid grid-cols-2 gap-2">
+            <ExportButton 
+                onClick={onExportExcel} 
+                label="Excel" 
+                icon="📊" 
+                color="bg-green-700/40 border-green-500/30" 
+                disabled={!enableExcel}
+            />
+            <ExportButton 
+                onClick={onExportPDF} 
+                label="PDF" 
+                icon="📄" 
+                color="bg-red-700/40 border-red-500/30" 
+                disabled={!enablePDF}
+            />
+            <ExportButton 
+                onClick={onExportCSV} 
+                label="CSV" 
+                icon="📝" 
+                color="bg-blue-700/40 border-blue-500/30" 
+                disabled={!enableCSV}
+            />
+            <ExportButton 
+                onClick={onExportImage} 
+                label="Chart" 
+                icon="🖼️" 
+                color="bg-purple-700/40 border-purple-500/30" 
+                disabled={!enableImage}
+            />
+        </div>
+      </div>
     </aside>
   );
+}
+
+function ExportButton({ onClick, label, icon, color, disabled }: any) {
+    if (!onClick) return null;
+    
+    // Disabled styling
+    const baseStyle = "flex flex-col items-center justify-center p-3 rounded-lg border transition-all";
+    const activeStyle = `hover:brightness-110 active:scale-95 ${color}`;
+    const disabledStyle = "opacity-30 grayscale cursor-not-allowed bg-gray-800/40 border-gray-700";
+
+    return (
+        <button 
+            onClick={disabled ? undefined : onClick}
+            disabled={disabled}
+            className={`${baseStyle} ${disabled ? disabledStyle : activeStyle}`}
+        >
+            <span className="text-xl mb-1">{icon}</span>
+            <span className="text-xs font-medium text-gray-200">{label}</span>
+        </button>
+    )
 }
 
 function ActionButton({ onClick, label, icon }: { onClick: () => void; label: string; icon: string }) {
